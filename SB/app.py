@@ -7,7 +7,7 @@ def load_yolo():
     net = cv2.dnn.readNet("yolov4.weights", "yolov4.cfg")
     layer_names = net.getLayerNames()
     unconnected_out_layers = net.getUnconnectedOutLayers()
-    print("Unconnected Out Layers:", unconnected_out_layers)  # Debug statement
+    print("Unconnected Out Layers:", unconnected_out_layers)  
     output_layers = [layer_names[i - 1] for i in unconnected_out_layers.flatten()]
     with open("coco.names", "r") as f:
         classes = [line.strip() for line in f.readlines()]
@@ -50,7 +50,6 @@ def draw_labels(boxes, confidences, class_ids, indexes, classes, img, engine, fo
             cv2.putText(img, f"{label} {confidence:.2f}", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
             distance = (known_width * focal_length) / w
             cv2.putText(img, f"Distance: {distance:.2f}m", (x, y + h + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-            # Speak the label and distance
             engine.say(f"{label} detected at a distance of {distance:.2f} meters")
             engine.runAndWait()
 
@@ -58,8 +57,8 @@ def start_video():
     net, classes, output_layers = load_yolo()
     cap = cv2.VideoCapture(0)
     engine = pyttsx3.init()
-    focal_length = 615  # Example focal length in pixels (calibrate your camera to get the exact value)
-    known_width = 0.5  # Example known width of the object in meters (use a known object for accuracy)
+    focal_length = 615  
+    known_width = 0.5  
     while True:
         ret, frame = cap.read()
         if not ret:
